@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background: #f5f5f5; }
+        h1, h2 { color: darkred; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        label { display: block; margin-top: 10px; }
+        input, select, button { width: 100%; padding: 8px; margin-top: 5px; }
+        button { background: darkred; color: white; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 8px; border-bottom: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>Painel Admin</h1>
+    <p>Bem-vindo, {{ session.user.nickname }} | <a href="/logout">Sair</a></p>
+
+    <div class="card">
+        <h2>Criar Conta</h2>
+        <form action="/admin/criar_conta" method="post">
+            <label>Nº Processo:</label><input type="text" name="numero_processo" required>
+            <label>Nome:</label><input type="text" name="nickname" required>
+            <label>Password:</label><input type="password" name="password" required>
+            <label>Tipo:</label>
+            <select name="tipo" required>
+                <option value="professor">Professor</option>
+                <option value="aluno">Aluno</option>
+            </select>
+            <button type="submit">Criar</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Criar Turma</h2>
+        <form action="/admin/criar_turma" method="post">
+            <label>Nome:</label><input type="text" name="nome" required>
+            <label>Ano:</label><input type="number" name="ano">
+            <button type="submit">Criar</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Criar Disciplina</h2>
+        <form action="/admin/criar_disciplina" method="post">
+            <label>Nome:</label><input type="text" name="nome" required>
+            <button type="submit">Criar</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Designar DT</h2>
+        <form action="/admin/designar_dt" method="post">
+            <label>Turma:</label>
+            <select name="turma_id" required>
+                {% for t in turmas %}<option value="{{ t[0] }}">{{ t[1] }}</option>{% endfor %}
+            </select>
+            <label>Professor:</label>
+            <select name="professor_id" required>
+                {% for p in professores %}<option value="{{ p[0] }}">{{ p[2] }}</option>{% endfor %}
+            </select>
+            <button type="submit">Designar</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Associar Professor a Disciplina</h2>
+        <form action="/admin/associar_professor_disciplina" method="post">
+            <select name="professor_id" required>
+                {% for p in professores %}<option value="{{ p[0] }}">{{ p[2] }}</option>{% endfor %}
+            </select>
+            <select name="disciplina_id" required>
+                {% for d in disciplinas %}<option value="{{ d[0] }}">{{ d[1] }}</option>{% endfor %}
+            </select>
+            <button type="submit">Associar</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Alocar Professor a Turma/Disciplina</h2>
+        <form action="/admin/alocar_professor" method="post">
+            <select name="professor_id" required>{% for p in professores %}<option value="{{ p[0] }}">{{ p[2] }}</option>{% endfor %}</select>
+            <select name="turma_id" required>{% for t in turmas %}<option value="{{ t[0] }}">{{ t[1] }}</option>{% endfor %}</select>
+            <select name="disciplina_id" required>{% for d in disciplinas %}<option value="{{ d[0] }}">{{ d[1] }}</option>{% endfor %}</select>
+            <button type="submit">Alocar</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Matricular Aluno</h2>
+        <form action="/admin/matricular_aluno" method="post">
+            <select name="aluno_id" required>{% for a in alunos %}<option value="{{ a[0] }}">{{ a[2] }}</option>{% endfor %}</select>
+            <select name="turma_id" required>{% for t in turmas %}<option value="{{ t[0] }}">{{ t[1] }}</option>{% endfor %}</select>
+            <button type="submit">Matricular</button>
+        </form>
+    </div>
+
+    <h2>Turmas Existentes</h2>
+    <table>
+        <tr><th>ID</th><th>Nome</th><th>Ano</th><th>DT</th></tr>
+        {% for t in turmas %}
+        <tr><td>{{ t[0] }}</td><td><a href="/turma/{{ t[0] }}">{{ t[1] }}</a></td><td>{{ t[2] }}</td><td>{{ t[3] or '-' }}</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EscolaApp - Início</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            pointer-events: none;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
+        }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #fff; text-decoration: none; }
+        .logo i { color: #e94560; margin-right: 10px; }
+        .account-icon { font-size: 2rem; color: #fff; transition: 0.2s; text-decoration: none; }
+        .account-icon:hover { color: #e94560; transform: scale(1.1); }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-name {
+            font-weight: 500;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 30px;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: calc(100vh - 180px);
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+        }
+        .hero-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 50px;
+            max-width: 800px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #e94560);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .subtitle { font-size: 1.3rem; margin-bottom: 40px; opacity: 0.9; }
+        .btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #e94560;
+            color: white;
+            box-shadow: 0 8px 20px rgba(233, 69, 96, 0.3);
+        }
+        .btn-primary:hover { background: #d63855; transform: translateY(-3px); }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.2);
+            padding: 20px 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+        .feature-item:hover {
+            background: rgba(233, 69, 96, 0.3);
+            transform: scale(1.05);
+        }
+        .feature-item i { font-size: 2rem; color: #e94560; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255,255,255,0.6);
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="logo"><i class="fas fa-graduation-cap"></i>EscolaApp</a>
+        <div class="user-info">
+            {% if session.user %}
+                <span class="user-name"><i class="fas fa-user"></i> {{ session.user.nickname }}</span>
+                <a href="{{ url_for('dashboard') }}" class="account-icon" title="Dashboard">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="account-icon" title="Entrar">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="hero-card">
+            <h1>Bem-vindo ao EscolaApp</h1>
+            <p class="subtitle">A plataforma completa para gestão escolar</p>
+            <div class="btn-group">
+                {% if session.user %}
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Ir para o Painel</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">Entrar</a>
+                {% endif %}
+            </div>
+            <div class="features">
+                <a href="{{ url_for('ver_turmas') }}" class="feature-item">
+                    <i class="fas fa-users"></i>
+                    <span>Turmas</span>
+                </a>
+                <a href="{{ url_for('ver_professores') }}" class="feature-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Professores</span>
+                </a>
+                <a href="{{ url_for('ver_alunos') }}" class="feature-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Alunos</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 EscolaApp - Todos os direitos reservados
+    </div>
+</body>
+</html>
